@@ -7,18 +7,20 @@ We may need to deploy third-party services that either have their own authentica
 Now, you might need a gatekeeper. It checks whether a client's IP address exists in a Redis Set to determine access. This allows you to create a unified verification page for these third-party services. Only visitors who pass your page's check (adding their IP to the whitelist) can access the services normally.
 
 Here’s a simple breakdown of the scenario:
-There are multiple third-party services running on my server.
 
-These services need to be accessible over the public internet, but only to me or authorized users.
+- There are multiple third-party services running on my server.
+
+- - These services need to be accessible over the public internet, but only to me or authorized users.
 
 These third-party services either lack authentication mechanisms or have their own user systems that cannot integrate with our internal systems.
 
-Redis-knocking helps achieve the following:  
-Users first access a designated login page. After successful authentication, their IP addresses are added to a Redis database (implementation handled by the developer).
+Redis-knocking helps achieve the following:
 
-Redis-knocking acts as a gateway that checks the IP whitelist stored in Redis to decide whether to allow or deny access.
+- Users first access a designated login page. After successful authentication, their IP addresses are added to a Redis database (implementation handled by the developer).
 
-Redis-knocking records the last access time of each IP to Redis, enabling automatic removal of inactive IPs from the whitelist (e.g., based on a predefined timeout configured by the developer).
+- Redis-knocking acts as a gateway that checks the IP whitelist stored in Redis to decide whether to allow or deny access.
+
+- Redis-knocking records the last access time of each IP to Redis, enabling automatic removal of inactive IPs from the whitelist (e.g., based on a predefined timeout configured by the developer).
 
 ## Installation in Container Images
 
