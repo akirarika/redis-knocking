@@ -116,13 +116,13 @@ func respondDenied(w http.ResponseWriter, r *http.Request, redirectURL string) {
 			http.Error(w, "Forbidden", http.StatusForbidden)
 			return
 		}
-		
+
 		conn, _, err := hj.Hijack()
 		if err != nil {
 			http.Error(w, "Forbidden", http.StatusForbidden)
 			return
 		}
-		
+
 		conn.Close()
 	}
 }
@@ -133,6 +133,7 @@ func main() {
 	targetAddr := flag.String("target", "http://localhost:8080", "Target server address")
 	redisURL := flag.String("redis", "", "Redis connection URL (e.g. redis://:password@host:port/db)")
 	redisSetKey := flag.String("set", "ip-allowed", "Redis set key containing allowed IPs")
+	redisHistoryKey := flag.String("history", "ip-history", "Redis hash key for storing last access times")
 	ipHeader := flag.String("ip-header", "", "HTTP header to get client IP (e.g. X-Real-IP)")
 	redirect := flag.String("redirect", "", "Redirect URL for denied requests (sends 302 if set)")
 	detail := flag.String("detail", "disabled", "Display more information in the console for debugging")
@@ -227,6 +228,14 @@ func main() {
 		}
 
 		allowed := isMember
+		if allowed {
+			hashCtx, hashCancel := context.WithTimeout(context.Background(), 1*time.Second)
+			defer hashCancel()
+			if err := redisClient.HSet(hashCtx, *redisHistoryKey, clientIP, time.Now().Unix()).Err(); err != nil {
+				log.Printf("Failed to update access time for IP %s: %v", clientIP, err)
+			}
+		}
+
 		ipCache.Lock()
 		ipCache.items[clientIP] = cacheItem{
 			allowed: allowed,
