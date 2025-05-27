@@ -10,9 +10,9 @@ Here’s a simple breakdown of the scenario:
 
 - There are multiple third-party services running on my server.
 
-- - These services need to be accessible over the public internet, but only to me or authorized users.
+- These services need to be accessible over the public internet, but only to me or authorized users.
 
-These third-party services either lack authentication mechanisms or have their own user systems that cannot integrate with our internal systems.
+- These third-party services either lack authentication mechanisms or have their own user systems that cannot integrate with our internal systems.
 
 Redis-knocking helps achieve the following:
 
