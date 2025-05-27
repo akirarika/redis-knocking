@@ -6,8 +6,6 @@ We may need to deploy third-party services that either have their own authentica
 
 Now, you might need a gatekeeper. It checks whether a client's IP address exists in a Redis Set to determine access. This allows you to create a unified verification page for these third-party services. Only visitors who pass your page's check (adding their IP to the whitelist) can access the services normally.
 
-The service only reads IP data from Redis and does not perform write or expiration operations.
-
 ## Installation in Container Images
 
 Assuming your container runs in a `linux-amd64` environment:
