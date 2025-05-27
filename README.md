@@ -13,10 +13,11 @@ The service only reads IP data from Redis and does not perform write or expirati
 Assuming your container runs in a `linux-amd64` environment:
 
 ```bash
-curl -o redis-knocking.tgz https://registry.npmjs.org/redis-knocking-linux-amd64/-/redis-knocking-linux-amd64-1.0.1.tgz \
+RUN curl -o redis-knocking.tgz https://registry.npmjs.org/redis-knocking-linux-amd64/-/redis-knocking-linux-amd64-1.0.1.tgz \
     && mkdir -p __temp__redis-knocking \
     && tar zxvf  redis-knocking.tgz -C ./__temp__redis-knocking \
     && mv __temp__redis-knocking/package/bin/redis-knocking ./redis-knocking \
+    && chmod +x ./redis-knocking \
     && rm -rf ./__temp__redis-knocking
 
 CMD ./redis-knocking -script "npm run dev" -target "http://localhost:5173" -listen ":5174" -redis "redis://root:password@1.2.3.4:6379/0"
